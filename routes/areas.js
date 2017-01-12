@@ -1,76 +1,81 @@
+/**
+ * Created by devios on 10/01/17.
+ */
 var mysql   = require("mysql");
 
-function REST_ROUTER(router,connection,md5) {
+function REST_ROUTER(router,connection) {
     var self = this;
-    self.handleRoutes(router,connection,md5);
+    self.handleRoutes(router,connection);
 }
 
-REST_ROUTER.prototype.handleRoutes = function(router,connection,md5) {
+REST_ROUTER.prototype.handleRoutes = function(router,connection) {
     var self = this;
-    router.get("/users",function(req,res){
+
+    router.get("/areas",function(req,res){
         var query = "SELECT * FROM ??";
-        var table = ["users"];
+        var table = ["areas"];
         query = mysql.format(query,table);
         connection.query(query,function(err,rows){
             if(err) {
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
-                res.json({"Error" : false, "Message" : "Success", "Users" : rows});
+                res.json({"Error" : false, "Message" : "Success", "Areas" : {"name":rows}});
+
             }
         });
     });
 
-    router.get("/users/:id",function(req,res){
+    router.get("/areas/:id",function(req,res){
         var query = "SELECT * FROM ?? WHERE ??=?";
-        var table = ["users","id",req.params.id];
+        var table = ["areas","id",req.params.id];
         query = mysql.format(query,table);
         connection.query(query,function(err,rows){
             if(err) {
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
-                res.json({"Error" : false, "Message" : "Success", "Users" : rows});
+                res.json({"Error" : false, "Message" : "Success", "Areas" : rows});
             }
         });
     });
 
-    router.post("/users",function(req,res){
-        var query = "INSERT INTO ??(??,??,??,??,??) VALUES (?,?,?,?,?)";
-        var table = ["users","name","surname","position","email","encrypted_password",req.body.name,req.body.surname,req.body.position,req.body.email,md5(req.body.encrypted_password)];
+    router.post("/areas",function(req,res){
+        var query = "INSERT INTO ??(??,??) VALUES (?,?)";
+        var table = ["areas","name","id",req.body.name,req.body.id];
         query = mysql.format(query,table);
         connection.query(query,function(err,rows){
             if(err) {
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
-                res.json({"Error" : false, "Message" : "User Added !"});
+                res.json({"Error" : false, "Message" : "Area Added !"});
             }
         });
     });
 
-    router.put("/users",function(req,res){
-        var query = "UPDATE ?? SET ?? = ?, ?? = ?, ?? = ?  WHERE ?? = ?";
-        var table = ["users","name",req.body.name,"surname",req.body.surname,"position",req.body.position,"email",req.body.email];
+    router.put("/areas",function(req,res){
+        var query = "UPDATE ?? SET ?? = ?  WHERE ?? = ?";
+        var table = ["areas","name",req.body.name];
         query = mysql.format(query,table);
         connection.query(query,function(err,rows){
             if(err) {
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
-                res.json({"Error" : false, "Message" : "Updated for email " + req.body.email});
+                res.json({"Error" : false, "Message" : "Updated Area "});
             }
         });
     });
 
-    router.delete("/users/:email",function(req,res){
+    router.delete("/areas/:id",function(req,res){
         var query = "DELETE from ?? WHERE ??=?";
-        var table = ["users","email",req.params.email];
+        var table = ["areas","id",req.params.id];
         query = mysql.format(query,table);
         connection.query(query,function(err,rows){
             if(err) {
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
-                res.json({"Error" : false, "Message" : "Deleted the user with email "+req.params.email});
+                res.json({"Error" : false, "Message" : "Deleted the Area"});
             }
         });
     });
 };
-// 3306
+
 module.exports = REST_ROUTER;

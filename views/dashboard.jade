@@ -1,0 +1,35 @@
+//
+   Created by devios on 12/01/17.
+extends layout-dashboard
+
+block content
+
+    head
+        h1 Dashboard
+        style
+            include ../public/stylesheets/style.css
+    body
+        div(ng-app="heyMan", resize)
+            div(layout="row")
+                div
+                    div(layout="column", flex="10", ng-controller="SidenavController as nav")
+                        md-sidenav(class="md-sidenav-left", md-component-id="left", md-is-locked-open="$mdMedia('gt-md')", style="min-width:250px; width:24%;")
+                            md-toolbar
+                                h1(class="md-toolbar-tools") Menu
+                            md-list(ng-repeat="item in nav.menuItems", style="padding:0px;")
+                                md-list-item(style="padding:0px; border-radius:0px;")
+                                    md-button(class="md-raised md-toolbar-tools sidenav-button  md-whiteframe-z2 md-primary" style="border-radius:0px;") {{item}}
+                div(flex layout="column")
+                    md-toolbar(layout="row", ng-controller="MenuController" class="content-toolbar md-whiteframe-z2 md-hue-1")
+                        md-button(class="md-icon-button ", style="padding-top:8px; margin-top:8px;",    ng-click="sidenavToggle()", aria-label="menu" , hide-element)
+                            ng-md-icon(icon="menu", size="30", style="fill:#202020;")
+                        div(class="md-toolbar-tools")
+                            span Hey man!
+                    md-content(flex, layout-padding, md-scroll-y, ng-controller="ContentController", ng-style="cHeight")
+                        md-content(flex, md-scroll-y)
+                            map(center="current-location", zoom="10", ng-style="mapsHeight")
+                                info-window(position="current-location", visible="true")
+                                    span This is your current location
+
+    script
+        include ../public/js/js.js

@@ -1,5 +1,35 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to a #{title}
+
+  head
+    title= title
+    style
+      include ../public/stylesheets/style.css
+  body
+    .wrapper
+      .container
+        img.logo(src='http://www.pacificmall.com.co/wp-content/uploads/logo-cinemark.png')
+        h1 Login
+        form.form(method='POST' action='/api/dashboard' onsubmit="return Valida(this);")
+          input(type='text', name='name', placeholder='Username')
+
+          input(type='password', name='encrypted_password',  placeholder='Password')
+
+          button#login-button(type='submit') Login
+      ul.bg-bubbles
+        li
+        li
+        li
+        li
+        li
+        li
+        li
+        li
+        li
+        li
+        li
+        li
+        li
+    script
+      include ../public/js/js.js
